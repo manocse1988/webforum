@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Web Forum</title>
+</head>
+<body>
+    <div class="container" id="banner">
+        <h1 style="color: white">Web Forum</h1>
+
+        <div class="row">
+            <div class="span6 offset3">
+                <nav class="navbar navbar-inverse">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="{{ url_for('index') }}">Connecting people... Let's talk</a>
+                        </div>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li id="signup"><a class="navbar-brand" href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="container" id="frame">
+
+    </div>
+</body>
+
+<!-- Load JQuery -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+    $( document ).ready(function() {
+         $.ajax({
+                url: '{{ url_for('login') }}',
+                type: 'get',
+                success: function(result){
+                    document.getElementById("frame").innerHTML = result;
+
+             }});
+
+    });
+
+    $("#btn").click(function(evt){
+
+        if ($("#usr").val() == ""){
+            $("#use-error").text("Please enter user name..");
+            evt.preventDefault();
+        } else{
+            $("#use-error").text("");
+        }
+
+        if ($("#pwd").val() == ""){
+            $("#pwd-error").text("Please enter password..");
+            evt.preventDefault();
+        } else{
+            $("#pwd-error").text("");
+        }
+    });
+
+    $("#signup").click(function(){
+          $.ajax(
+                {
+                  url: "{{ url_for('signup') }}",
+                  success: function(result){
+                    document.getElementById("frame").innerHTML = result;
+          }});
+    });
+
+    $("#frame").delegate( '#createbtn', "click", function(event) {
+
+        vfirstname = $("#idfirstname").val();
+        vlastname = $("#idlastname").val();
+        vemail = $("#idemail").val();
+        vusername = $("#idusername").val();
+        vpassword = $("#idpassword").val();
+
+        postData = {
+                    "wfirstname": vfirstname,
+                    "wlastname":  vlastname,
+                    "wemail":     vemail,
+                    "wusername": vusername,
+                    "wpassword": vpassword
+                    };
+
+        $.post( "{{ url_for('createuser') }}",postData, function( data ) {
+                 document.getElementById("frame").innerHTML = data;
+                });
+
+    });
+
+</script>
+
+<style>
+#frame {
+  border-style: solid;
+  background-image: url('/static/frame.jpg');
+  height: 1000px;
+  border-top-width: 0px;
+  padding: 60px
+}
+
+#banner {
+  border-style: solid;
+  background-image: url('/static/banner1.jpg');
+  height: 80px;
+  border-left-width: 2px;
+  border-bottom-width: 0px;
+}
+
+hr {
+  display: block;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  margin-left: auto;
+  margin-right: auto;
+  border-style: inset;
+  border-width: 1px;
+}
+
+#use-error {
+ color: red;
+}
+
+#pwd-error {
+ color: red;
+}
+
+</style>
+
+
+<!-- Load JSON file and output it-->
+
+</html>

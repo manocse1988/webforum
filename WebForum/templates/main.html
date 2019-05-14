@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Web Forum</title>
+</head>
+<body>
+
+<input type="hidden" id="hiddenusername" value=" {{request.args.get('username')}} ">
+<input type="hidden" id="hminindex" value="">
+<input type="hidden" id="hmaxindex" value="">
+<input type="hidden" id="hmax" value="">
+
+<div class="container" id="banner">
+    <h3 style="color: white"><strong>Web Forum</strong></h3>
+
+    <div class="row">
+        <div class="span6 offset3">
+            <nav class="navbar navbar-inverse bg-dark">
+                <ul class="nav navbar-nav">
+                    <li class="nav-item" id="topics">
+                        <a class="nav-link"><strong>Topics</strong></a>
+                    </li>
+                    <li class="nav-item" id="topicpage">
+                        <a class="nav-link"><strong>Create Topic</strong></a>
+                    </li>
+                    <li class="nav-item" id="mytopics">
+                        <a class="nav-link"><strong>My Topics</strong></a>
+                    </li>
+                    <li class="nav-item" id="myfavorites">
+                        <a class="nav-link"><strong>My Favorites</strong></a>
+                    </li>
+                    <li class="nav-item" id="userprofile">
+                        <a class="nav-link"><strong>User Profile</strong></a>
+                    </li>
+                </ul>
+                <form class="navbar-form navbar-left">
+
+                        <input id="searchinput" type="text" class="form-control" placeholder="Search" name="search">
+
+
+                        <input type="button" id="btnsearchtopic" value="Search Topic" class="btn btn-default"/>
+
+                </form>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{{ url_for('index') }}"> {{request.args.get('username')}}  <span class="glyphicon glyphicon-log-out"></span><strong> Logout </strong></a></li>
+                </ul>
+
+            </nav>
+
+
+        </div>
+
+    </div>
+</div>
+<div class="container" id="frame">
+
+    <div id="contentheader"><strong>Welcome {{request.args.get('username')}} !!!</strong></div>
+    <br>
+
+    <div id="pageholder" >
+
+
+    </div>
+
+</div>
+<div class="container" id="footer">
+    <strong style="color: white">Author: Manoj Kumar</strong>
+
+</div>
+
+</body>
+
+<!-- Load JQuery -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+<link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css'>
+<script>
+
+    function fgettopics() {
+         var jsvuserid = getUrlVars()["userid"];
+
+          $.ajax(
+                {
+                  url: "{{ url_for('gettopics') }}",
+                  data: { userid: jsvuserid },
+                  success: function(result){
+
+                    document.getElementById("pageholder").innerHTML = result;
+          }});
+
+    }
+
+    function getUrlVars()
+    {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for(var i = 0; i < hashes.length; i++)
+        {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }
+
+    $( document ).ready(function() {
+        fgettopics();
+    });
+
+    $("#topicpage").click(function(){
+          $.ajax(
+                {
+                  url: "{{ url_for('topicpage') }}",
+                  success: function(result){
+                    document.getElementById("pageholder").innerHTML = result;
+                    document.getElementById("contentheader").innerHTML = "";
+          }});
+     });
+
+    $("#topics").click(function(){
+        fgettopics();
+        document.getElementById("contentheader").innerHTML = "<strong> Welcome" + $("#hiddenusername").val() + " !!! </strong>";
+     });
+
+    $("#userprofile").click(function(){
+      var vuserid = getUrlVars()["userid"];
+      var vdata = getUrlVars()["data"];
+          $.ajax(
+                {
+                  url: "{{ url_for('signup') }}",
+                  type: 'get',
+                  data: { userid: vuserid },
+                  success: function(result){
+                    document.getElementById("pageholder").innerHTML = result;
+                    document.getElementById("contentheader").innerHTML = "<strong>Update Profile</strong>";
+          }});
+    });
+
+
+    $("#mytopics").click(function(){
+        var vuserid = getUrlVars()["userid"];
+
+        $.ajax(
+            {
+              url: "{{ url_for('mytopics') }}",
+              type: 'get',
+              data: { userid: vuserid },
+              success: function(result){
+                document.getElementById("pageholder").innerHTML = result;
+                document.getElementById("contentheader").innerHTML = "<strong>My Topics</strong>";
+
+        }});
+    });
+
+    $("#myfavorites").click(function(){
+        var vuserid = getUrlVars()["userid"];
+
+        $.ajax(
+            {
+              url: "{{ url_for('myfavorites') }}",
+              type: 'get',
+              data: { userid: vuserid },
+              success: function(result){
+                document.getElementById("pageholder").innerHTML = result;
+                document.getElementById("contentheader").innerHTML = "<strong>My Favorites</strong>";
+
+        }});
+    });
+
+    $("#pageholder").delegate( '#btncreatetopic', "click", function(event) {
+        var jsVarTopic = $("#topicinput").val();
+        var jsvuserid = getUrlVars()["userid"];
+        $.ajax(
+            {
+              url: "{{ url_for('createtopic') }}",
+              type: 'post',
+              data: { userid: jsvuserid,
+                      topicname: jsVarTopic },
+              success: function(result){
+                document.getElementById("pageholder").innerHTML = result;
+
+        }});
+
+    });
+
+     $("#banner").delegate( '#btnsearchtopic', "click", function(event) {
+            var jsVSearchTopic = $("#searchinput").val();
+            var jsvuserid = getUrlVars()["userid"];
+             $.ajax(
+            {
+              url: "{{ url_for('searchtopic') }}",
+              type: 'get',
+              data: { topicname: jsVSearchTopic,
+                      userid: jsvuserid},
+              success: function(result){
+                document.getElementById("pageholder").innerHTML = result;
+                $("#searchinput").val("");
+                document.getElementById("contentheader").innerHTML = "<strong>Found Results</strong>";
+            }});
+
+    });
+    function favoritefunc(vtopicid){
+        var jsvuserid = getUrlVars()["userid"];
+        var idelement = "emoji" + vtopicid;
+         $.ajax(
+            {
+              url: "{{ url_for('postfavorite') }}",
+              type: 'post',
+              data: { userid: jsvuserid,
+                      topicid: vtopicid},
+              success: function(result){
+                if (result == "Added"){
+                    $( "#" + idelement ).html( '<a href="javascript:favoritefunc(' + vtopicid + ')"><i class="em em-heart"></i></a>');
+                 } else {
+                    $( "#" + idelement ).html( '<a href="javascript:favoritefunc(' + vtopicid + ')"><i class="em em-orange_heart"></i></a>');
+                 }
+            }});
+
+    }
+
+    function getposts(ptopicid, ptopicname, pmin, pmax, pmaxrecords) {
+        $("#hminindex").val(pmin);
+        $("#hmaxindex").val(pmax);
+        if (pmaxrecords === 'undefined'){
+            $("#hmax").val("0");
+        }else{
+            $("#hmax").val(pmaxrecords);
+        }
+        $.ajax(
+            {
+              url: "{{ url_for('getposts') }}",
+              type: 'get',
+              data: { topicid: ptopicid,
+                      topicname: ptopicname,
+                      minindex: pmin,
+                      maxindex: pmax
+                      },
+              success: function(result){
+               document.getElementById("pageholder").innerHTML = result;
+               document.getElementById("contentheader").innerHTML = "<strong>Here are the posts for " + ptopicname + "</strong>";
+            }});
+
+    }
+
+    function fpostcomnt(ptopicid, ptopicname){
+      var inputcomment = $("#comment").val();
+      var jsvuserid = getUrlVars()["userid"];
+      var pmin = $("#hminindex").val();
+      var pmax = $("#hmaxindex").val();
+      var pmaxrecords = $("#hmax").val();
+
+      $.ajax(
+            {
+              url: "{{ url_for('postcomnt') }}",
+              type: 'post',
+              data: { topicid: ptopicid,
+                      comments: inputcomment,
+                      userid: jsvuserid},
+              success: function(result){
+               getposts(ptopicid, ptopicname, pmin, pmax, pmaxrecords);
+               $("#comment").val("");
+               document.getElementById("contentheader").innerHTML = "<strong>Here are the posts for " + ptopicname + "</strong>";
+            }});
+
+    }
+
+    function pager(ptype, ptopicid, ptopicname, pminindex, pmaxindex, pmaxrecords) {
+
+        if (ptype == "nxt"){
+                pminindex = pmaxindex;
+                pmaxindex = pmaxindex + 24;
+                if (pminindex > pmaxrecords){
+                    alert("No records found!!!");
+                    return false;
+                }
+        } else {
+
+                pminindex = pminindex - 24;
+                pmaxindex = pmaxindex - 24;
+
+                if (pminindex <= 0) {
+                pminindex = 0
+                pmaxindex = 24;
+            }
+        }
+
+        $("#hminindex").val(pminindex);
+        $("#hmaxindex").val(pmaxindex);
+        $("#hmax").val(pmaxrecords);
+
+        getposts(ptopicid, ptopicname, pminindex, pmaxindex, pmaxrecords);
+    }
+
+</script>
+<style>
+#frame {
+  border-style: solid;
+  background-image: url('/static/frame.jpg');
+  height: 1500px;
+  border-top-width: 0px;
+  padding: 40px
+}
+
+#pageholder {
+  height: 1400px;
+}
+
+#postlist {
+ height: 1200px;
+}
+
+#postcomnt {
+padding: 1px
+}
+
+#rowtopic {
+  height: 50px;
+  padding: 10px;
+}
+
+#banner {
+  border-style: solid;
+  background-image: url('/static/banner1.jpg');
+  height: 80px;
+  border-left-width: 2px;
+  border-bottom-width: 0px;
+}
+
+#footer{
+  border-style: solid;
+  background-image: url('/static/banner1.jpg');
+  height: 40px;
+  border-left-width: 2px;
+  border-bottom-width: 0px;
+}
+
+hr {
+  display: block;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  margin-left: auto;
+  margin-right: auto;
+  border-style: inset;
+  border-width: 1px;
+}
+</style>
+</html>

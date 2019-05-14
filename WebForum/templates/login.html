@@ -1,0 +1,17 @@
+<form action="{{ url_for('authorize') }}" method="post">
+    <div class="form-group">
+        <label for="exampleInputUserName">UserName</label>
+        <input id="usr" type="text" name="wusername" class="form-control col-xs-4" placeholder="UserName"/>
+
+        <div id="use-error"></div>
+
+        <label for="exampleInputPassword1">Password</label>
+        <input id="pwd" type="password" name="wpassword" class="form-control col-xs-4" placeholder="Password"/>
+
+        <div id="pwd-error"></div>
+
+    </div>
+    <br>
+    <br>
+    <button id="btn" type="submit" class="btn btn-primary">Login</button>
+</form>
