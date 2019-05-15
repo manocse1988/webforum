@@ -1,6 +1,6 @@
 """
 Author: Manoj Kumar Panneer Selvam
-Purpose: This module has all the business logic to process web request created using OOPS and annotation model
+Purpose of module: This module has all the business logic to process web request created using OOPS and annotation model
 """
 from src.share import dbconnect
 from flask import Flask, render_template, redirect, url_for, request, jsonify
