@@ -1,3 +1,8 @@
+<!--
+Author: Manoj Kumar Panneer Selvam
+Purpose: Login page to display login and signup page
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +12,6 @@
 <body>
     <div class="container" id="banner">
         <h1 style="color: white">Web Forum</h1>
-
         <div class="row">
             <div class="span6 offset3">
                 <nav class="navbar navbar-inverse">
@@ -24,7 +28,6 @@
         </div>
     </div>
     <div class="container" id="frame">
-
     </div>
 </body>
 
@@ -39,9 +42,7 @@
                 type: 'get',
                 success: function(result){
                     document.getElementById("frame").innerHTML = result;
-
-             }});
-
+         }});
     });
 
     $("#btn").click(function(evt){
@@ -62,8 +63,7 @@
     });
 
     $("#signup").click(function(){
-          $.ajax(
-                {
+          $.ajax({
                   url: "{{ url_for('signup') }}",
                   success: function(result){
                     document.getElementById("frame").innerHTML = result;
@@ -130,8 +130,5 @@ hr {
 }
 
 </style>
-
-
-<!-- Load JSON file and output it-->
 
 </html>

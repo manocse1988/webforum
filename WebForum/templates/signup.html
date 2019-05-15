@@ -1,20 +1,44 @@
 <div class="form-group">
     <label for="forfirstname">First Name</label>
-    <input id="idfirstname" type="text" name="wfirstname" class="form-control" placeholder="firstname" width="50"/>
+    {% if data['wfirstname'] %}
+        <input id="idfirstname" type="text" name="wfirstname" class="form-control" placeholder="firstname" value=" {{ data['wfirstname'] }} "/>
+    {% else %}
+        <input id="idfirstname" type="text" name="wfirstname" class="form-control" placeholder="firstname"/>
+    {% endif %}
 
     <label for="forlastname">Last Name</label>
-    <input id="idlastname" type="text" name="wlastname" class="form-control" placeholder="lastname"/>
+    {% if data['wlastname'] %}
+        <input id="idlastname" type="text" name="wlastname" class="form-control" placeholder="lastname" value=" {{ data['wlastname'] }} "/>
+    {% else %}
+        <input id="idlastname" type="text" name="wlastname" class="form-control" placeholder="lastname"/>
+    {% endif %}
 
     <label for="foremail">Email</label>
-    <input id="idemail" type="text" name="wemail" class="form-control" placeholder="email"/>
+    {% if data['wemail'] %}
+        <input id="idemail" type="text" name="wemail" class="form-control" placeholder="email" value=" {{ data['wemail'] }} "/>
+    {% else %}
+        <input id="idemail" type="text" name="wemail" class="form-control" placeholder="email"/>
+    {% endif %}
 
     <label for="forusername">User Name</label>
-    <input id="idusername" type="text" name="wusername" class="form-control" placeholder="username"/>
+    {% if data['wusername'] %}
+        <input id="idusername" type="text" name="wusername" class="form-control" placeholder="username" value=" {{ data['wusername'] }} "/>
+    {% else %}
+        <input id="idusername" type="text" name="wusername" class="form-control" placeholder="username"/>
+    {% endif %}
 
     <label for="forpassword">Password</label>
-    <input id="idpassword" type="password" name="wpassword" class="form-control col-xs-4" placeholder="password"/>
+    {% if data['wpassword'] %}
+        <input id="idpassword" type="password" name="wpassword" class="form-control col-xs-4" placeholder="password" value=" {{ data['wpassword'] }} "/>
+    {% else %}
+        <input id="idpassword" type="password" name="wpassword" class="form-control col-xs-4" placeholder="password"/>
+    {% endif %}
 
 </div>
 <br>
 <br>
-<input id="createbtn" type="button" value="Create User" class="btn btn-primary"/>
+{% if data['wfirstname'] %}
+    <input id="modifybtn" type="button" value="Modify User" class="btn btn-primary"/>
+{% else %}
+    <input id="createbtn" type="button" value="Create User" class="btn btn-primary"/>
+{% endif %}
